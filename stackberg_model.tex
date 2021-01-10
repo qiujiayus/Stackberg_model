@@ -210,12 +210,14 @@ T hour model:
 \begin{align}  
     w = \{z, y_{1}, \cdots y_{N}\}
 \end{align}
+
+
 \begin{align}  
     \begin{bmatrix}
-        -C_{1} & B_{1} & \cdots & \cdots & \cdots\\
-        -C_{2} &\vdots  & B_{2} & \cdots & \cdots\\
+        -U_{1} & B_{1} & \cdots & \cdots & \cdots\\
+        -U_{2} &\vdots  & B_{2} & \cdots & \cdots\\
          \vdots  & \vdots  & \vdots & \ddots  & \cdots\\
-        -C_{N} & \cdots  & \cdots & \cdots & B_{N}\\
+        -U_{N} & \cdots  & \cdots & \cdots & B_{N}\\
     \end{bmatrix}
     \begin{bmatrix}
         z\\
@@ -231,6 +233,8 @@ T hour model:
         r_{n}^0\\
     \end{bmatrix}
 \end{align}
+
+
 \begin{align}  
     r = \begin{bmatrix}
         r_{1}^0\\
@@ -250,6 +254,27 @@ T hour model:
 \end{align}
 
 
+\begin{align}  
+    \begin{bmatrix}
+        -U_{1} & B_{1} & \cdots & \cdots & \cdots\\
+        -U_{2} &\vdots  & B_{2} & \cdots & \cdots\\
+         \vdots  & \vdots  & \vdots & \ddots  & \cdots\\
+        -U_{N} & \cdots  & \cdots & \cdots & B_{N}\\
+    \end{bmatrix}
+    \begin{bmatrix}
+        z\\
+        y_1\\
+        y_2\\
+        \vdots \\
+        y_N\\
+    \end{bmatrix} \leq
+    \begin{bmatrix}
+        r_{1}^0\\
+        r_{2}^0\\
+        \vdots \\
+        r_{n}^0\\
+    \end{bmatrix}
+\end{align}
 
 
 
@@ -367,6 +392,50 @@ T hour model:
         r_{N,T}^0\\
     \end{bmatrix}
 \end{align}
+
+
+\begin{align}  
+    \begin{bmatrix}
+        -U_{1,1} & B_{1,1} &         &         &         &         &         &         &         &         &         &         &\\
+        \vdots  &         & \ddots  &         &         &         &         &         &         &         &         &         &\\
+        -U_{N,1} &         &         & B_{N,1} &         &         &         &         &         &         &         &         &\\
+        -U_{1,2} &         &         &         & B_{1,2} &         &         &         &         &         &         &         &\\
+        \vdots  &         &         &         &          &  \ddots &        &         &         &         &         &         &\\
+        -U_{N,2}&         &         &         &         &         & B_{N,2}  &        &         &         &         &         &\\
+        \vdots  &         &         &         &         &         &         & \ddots  &         &         &         &         &\\
+        -U_{1,T}&         &         &         &         &         &         &         & B_{1,T} &         &          &         &\\
+        \vdots  &         &         &         &         &         &         &         &         & \ddots  &         &     &\\
+        -U_{N,T}&         &         &         &         &         &         &         &         &         & B_{N,T}  &         & \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        z_{1}\\
+        \vdots\\
+        z_{T}\\
+        y_{1,1}\\
+        \vdots \\
+        y_{1,T} \\
+        y_{2,1}\\
+        \vdots \\
+        y_{2,T} \\
+        \vdots \\
+        y_{N,1}\\
+        \vdots \\
+        y_{N,T} \\
+    \end{bmatrix} \leq
+    \begin{bmatrix}
+        r_{1,1}^0\\
+        \vdots \\
+        r_{N,1}^0\\
+        r_{1,2}^0\\
+        \vdots \\
+        r_{N,2}^0\\
+        \vdots \\
+        r_{1,T}^0\\
+        \vdots \\
+        r_{N,T}^0\\
+    \end{bmatrix}
+\end{align}
+
 
 
 \begin{align}
@@ -551,10 +620,10 @@ the AES model:
 \begin{align}  
     &min \quad \frac{1}{2}dE_{ei}^2 -cE_{ei} + C_{si}P_{si} +  C_{ei}P_{ei}\nonumber\\
     &s.t \begin{cases}
-        E_{ei} - P_{ei}\eta \leq E_{ei}^{0}\\
-         -E_{ei} + P_{ei}\eta \leq -E_{ei}^{0}\\
-         P_{ei} \eta  \leq E_{ei}^{max} - E_{ei}^0 \\
-         -P_{ei}  \eta \leq -E_{ei}^{min} + E_{ei}^0  
+        E_{ei} - E_{ei}^{max} \leq 0\\
+         -E_{ei} + E_{ei}^{min}\leq 0\\
+         -P_{ei}\leq 0\\
+          P_{ei} - P_{ei}^{max} \leq 0
         \end{cases}
 \end{align}
 the model can be written in the form of matrix
@@ -591,10 +660,12 @@ the model can be written in the form of matrix
 
 \begin{align} 
     \begin{bmatrix}
-        1 & 0 & -\eta  & 0\\
-        -1 & 0 & \eta & 0\\
-        0 & 0 & \eta & 0\\
-        0 & 0 & -\eta & 0
+        1 & 0 & 0 & 0\\
+        -1 & 0 & 0 & 0\\
+        0 & 0 & -1 & 0\\
+        0 & 0 & 1 & 0\\
+        0 & 0 & 0 & -1\\
+        0 & 0 & 0 & 1
     \end{bmatrix} 
     \begin{bmatrix}
         E_{ei}\\
@@ -603,10 +674,12 @@ the model can be written in the form of matrix
         P_{si}
     \end{bmatrix} \leq
     \begin{bmatrix}
-        E_{ei}^{0}\\
-        -E_{ei}^{0}\\
-        E_{ei}^{max} - E_{ei}^{0}\\
-        -E_{ei}^{min} + E_{ei}^{0}
+        E_{ei}^{max}\\
+        E_{ei}^{min}\\
+        0\\
+        P_{e}^{max}\\
+        0\\
+        P_{s}^{max}
     \end{bmatrix}
 \end{align}
 
@@ -790,6 +863,344 @@ the model can be written in the form of matrix
         \end{bmatrix}\\
     \end{bmatrix} 
 \end{align}
+
+\begin{align}
+    \begin{bmatrix}
+        \begin{bmatrix}
+            0\\
+            a\\
+            0\\
+            -C_{si}
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            0\\
+            -a\\
+            0\\
+            C_{si}
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            E_{si}^{max}\\
+            E_{si}^{min}\\
+            0\\
+            P_{s}^{max}
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            -E_{si}^{max} + M\\
+            -E_{si}^{min} + M\\
+            M\\
+            -P_{s}^{max} + M
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            0\\
+            0\\
+            0\\
+            0
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            0\\
+            0\\
+            0\\
+            0
+        \end{bmatrix}\\
+    \end{bmatrix} +
+    \begin{bmatrix}
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & -c\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & c\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+    \end{bmatrix}
+    \begin{bmatrix}
+        C_{ei}\\
+        C_{si}
+    \end{bmatrix}
+\end{align}
+
+
+\begin{align}  
+    \begin{bmatrix}
+         \begin{bmatrix}
+            d & 0 & 0 & 0\\
+            0 & 0  & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix}  & 
+        \begin{bmatrix}
+            -1 & 1 & 0  & 0\\
+            0 & 0 & 0 & 0\\
+            \eta & -\eta & -\eta  & \eta\\
+            0 & 0 & 0 & 0
+        \end{bmatrix}  &
+        \begin{bmatrix}
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix} \\
+        \begin{bmatrix}
+            -d & 0 & 0 & 0\\
+            0 & 0  & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix}  & 
+        \begin{bmatrix}
+            1 & -1 & 0  & 0\\
+            0 & 0 & 0 & 0\\
+            -\eta & \eta & \eta  & -\eta\\
+            0 & 0 & 0 & 0
+        \end{bmatrix}  &
+        \begin{bmatrix}
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix} \\
+        \begin{bmatrix}
+            1 & 0 & -\eta  & 0\\
+            -1 & 0 & \eta & 0\\
+            0 & 0 & \eta & 0\\
+            0 & 0 & -\eta & 0
+        \end{bmatrix}  & 
+        \begin{bmatrix}
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix}   &
+        \begin{bmatrix}
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix} \\
+        \begin{bmatrix}
+            -1 & 0 & \eta  & 0\\
+            1 & 0 & -\eta & 0\\
+            0 & 0 & -\eta & 0\\
+            0 & 0 & \eta & 0
+        \end{bmatrix}  & 
+        \begin{bmatrix}
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix}   &
+        \begin{bmatrix}
+            M & 0 & 0 & 0\\
+            0 & M & 0 & 0\\
+            0 & 0 & M & 0\\
+            0 & 0 & 0 & M
+        \end{bmatrix} \\
+        \begin{bmatrix}
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix}  & 
+        \begin{bmatrix}
+            1 & 0 & 0 & 0\\
+            0 & 1 & 0 & 0\\
+            0 & 0 & 1 & 0\\
+            0 & 0 & 0 & 1
+        \end{bmatrix}   &
+        \begin{bmatrix}
+            -M & 0 & 0 & 0\\
+            0 & -M & 0 & 0\\
+            0 & 0 & -M & 0\\
+            0 & 0 & 0 & -M
+        \end{bmatrix} \\
+        \begin{bmatrix}
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix}  & 
+        \begin{bmatrix}
+            -1 & 0 & 0 & 0\\
+            0 & -1 & 0 & 0\\
+            0 & 0 & -1 & 0\\
+            0 & 0 & 0 & -1
+        \end{bmatrix}   &
+        \begin{bmatrix}
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0
+        \end{bmatrix} \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        E_{ei} \\
+        E_{si} \\
+        P_{ei} \\
+        P_{si} \\
+        u_1\\
+        u_2\\
+        u_3\\
+        u_4\\
+        I1\\
+        I2\\
+        I3\\
+        I4 
+    \end{bmatrix} \leq
+    \begin{bmatrix}
+        \begin{bmatrix}
+            c \\
+             0 \\
+            -C_{ei} \\
+            -C_{si}
+        \end{bmatrix} \\
+        \begin{bmatrix}
+            -c \\
+             0 \\
+            C_{ei} \\
+            C_{si}
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            E_{ei}^{0}\\
+            -E_{ei}^{0}\\
+            E_{ei}^{max} - E_{ei}^{0}\\
+            -E_{ei}^{min} + E_{ei}^{0}
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            -E_{ei}^{0} + M\\
+            E_{ei}^{0}^{min} + M\\
+            -E_{ei}^{max} + E_{ei}^{0} + M\\
+            E_{ei}^{min} - E_{ei}^{0} + M
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            0\\
+            0\\
+            0\\
+            0
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            0\\
+            0\\
+            0\\
+            0
+        \end{bmatrix}\\
+    \end{bmatrix} 
+\end{align}
+
+\begin{align}
+    \begin{bmatrix}
+        \begin{bmatrix}
+            c \\
+             0 \\
+            -C_{ei} \\
+            -C_{si}
+        \end{bmatrix} \\
+        \begin{bmatrix}
+            -c \\
+             0 \\
+            C_{ei} \\
+            C_{si}
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            E_{ei}^{0}\\
+            -E_{ei}^{0}\\
+            E_{ei}^{max} - E_{ei}^{0}\\
+            -E_{ei}^{min} + E_{ei}^{0}
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            -E_{ei}^{0} + M\\
+            E_{ei}^{0}^{min} + M\\
+            -E_{ei}^{max} + E_{ei}^{0} + M\\
+            E_{ei}^{min} - E_{ei}^{0} + M
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            0\\
+            0\\
+            0\\
+            0
+        \end{bmatrix}\\
+        \begin{bmatrix}
+            0\\
+            0\\
+            0\\
+            0
+        \end{bmatrix}\\
+    \end{bmatrix}  +
+    \begin{bmatrix}
+        0 & 0\\
+        0 & 0\\
+        c1 & 0\\
+        0 & c2\\
+        0 & 0\\
+        0 & 0\\
+        c1 & 0\\
+        0 & c2\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+    \end{bmatrix}
+    \begin{bmatrix}
+        C_{ei}\\
+        C_{si}
+    \end{bmatrix}
+\end{align}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \end{document}
