@@ -1,5 +1,5 @@
 %the conventional ship
-function [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = ship(a, b, Cs, Esi_max, Esi_min, Psi_max, N, T)
+function [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = conventional(a, b, Cs, Esi_max, Esi_min, Psi_max, N, T)
 	%M
     M = 1e10;
     %variables

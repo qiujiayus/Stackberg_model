@@ -1,53 +1,71 @@
 clear;
-
+load data;
 %%parameter preset
-kind = 2;  %the kind of player
-N = [1,2]; %each player's number 
-T = 3;
+N = [1, 1]; %each player's number 
+T = 1;%hour
 
 %length of z_t, y_continuous_t, y_binary_t;
 len_zt = 2;
-y_continuous_t = [8, 8];
-y_binary_t = [4, 4];
+
+y_continuous_t = [8, 10];
+y_binary_t = [4, 6];%conventional 模型的不等式约束条件有4个，AES 模型的不等式约束条件有6个
 
 %R = {U, B}
 %R w <= r
+%
+B = cell(sum(N),1);   %the B matrix
+U = cell(sum(N),1);   %the U matrix
+r = []; %the r matrix
 
-B = cell(sum(N));   %the B 
-U = cell(sum(N));   %the U 
-r = [];
+%conventional ship model
 for nn = 1 : N(1)
-	 [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = ship(a(nn), b(nn), Cs(nn), Esi_max(nn), Esi_min(nn), Psi_max(nn), N, T);
+	 [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = conventional(a(nn), b(nn), Cs(nn), Esi_max(nn), Esi_min(nn), Psi_max(nn), N(1), T);
 	 B{nn} = Bi; 
 	 U{nn} = Ui;
 	 r = [r;ri];
 end
 
-for nn = N(1) + 1 : N(2)
-	 [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = AES(c(nn), d(nn), Ce(nn), Cs(nn), Esi_max(nn), Eei_min(nn), Pei_max(nn), Esi_min(nn), Psi_max(nn), N, T);
+%AES model
+for nn =  N(1) + 1 : N(1) + N(2)
+	 [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = AES(c(nn), d(nn), Ce(nn), Cs(nn), Esi_max(nn), Eei_min(nn), Pei_max(nn), Esi_min(nn), Psi_max(nn), N(2), T);
 	 B{nn} = Bi; 
 	 U{nn} = Ui;
 	 r = [r;ri];
 end
 
-R = zeros(sum(N) * length(B{1}(:,1)),  length(U{1}(1,:)) + sum(N) * length(B{1}(1,:)));
+
+row = 0;
+for mm = 1 : length(N)
+    row = row + length(B{mm}(:,1));
+end
+col = length(U{mm}(1,:));
+for mm = 1 : length(N)
+    col = col + length(B{mm}(1,:));
+end
+R = zeros(row, col);
+row = 0;
+col = 0;
 for mm = 1 : sum(N)
     B_temp = B{mm};
-    R(1 + (mm - 1) * length(B_temp(:,1)) : mm * length(B_temp(:,1)), 1:length(U{1}(1,:))) = U{mm};
-    R(1 + (mm - 1) * length(B_temp(:,1)) : mm * length(B_temp(:,1)), ...
-		len_zt + 1 + (mm - 1) * length(B_temp(1,:)) : len_zt + mm * length(B_temp(1,:))) = B{mm};
+    row = row + length(B_temp(:,1));
+    col = col + length(B_temp(1,:));
+    R(1 + (row -  length(B_temp(:,1))): row, 1:length(U{1}(1,:))) = U{mm};
+    R(1 + (row -  length(B_temp(:,1))): row, ...
+		len_zt * T + 1 + (col - length(B_temp(1,:))) : len_zt * T+ col) = B{mm};
 end
 
+
+%the leader model
 lambda_e = (1:T);
 lambda_s = (1:T);
-[Q_leader, c_leader] = leader(lambda_e, lambda_s, T, sum(N));
+[Q_leader, c_leader] = leader(lambda_e, lambda_s, T, N);
 
 
 %min w * Q_leader * w + c_leader * w 
 %R w <= r
 
 %the leader model
-% params.OutputFlag = 0;
+params.OutputFlag = 0;
 params.NonConvex = 2;
 clear models
 modelx.modelsense = 'min';
@@ -57,40 +75,44 @@ modelx.A = sparse(R);
 modelx.rhs = r;
 modelx.sense = repmat('<',length(modelx.rhs ),1);
 modelx_vtype_y = [];
-for mm = 1 : kind
-	modelx_vtype_y = [modelx_vtype_y;repmat([repmat('C',[y_continuous_t, 1]);repmat('B',[y_binary_t, 1])], [T * N(mm),1])];
+for mm = 1 : length(N)
+    for nn = 1 : T
+        modelx_vtype_y = [modelx_vtype_y;
+            repmat('C',[y_continuous_t(mm), 1]);
+            repmat('B',[y_binary_t(mm), 1])];
+    end
 end
 modelx.vtype = [repmat('C',[len_zt * T, 1]);modelx_vtype_y];
 gurobi_write(modelx, 'modelx.lp');
 resultx = gurobi(modelx, params);
-x1 = resultx.x;
+x = resultx.x
 
 
-%the original model
-params.OutputFlag = 0;
-clear models
-model.modelsense = 'min';
-model.obj = ci;
-model.Q = sparse(Qi);
-model.A = sparse(Ai);
-model.rhs = di;
-model.sense = repmat('<',length(model.rhs ),1);
-gurobi_write(model, 'mymodel.lp')
-result = gurobi(model,params);
-x0 = result.x;
-
-%the lagrange model
-params.OutputFlag = 0;
-clear models
-modelc.modelsense = 'min';
-modelc.obj = 1*ones(length(Bi(1,:)),1);
-modelc.A = sparse(Bi);
-modelc.rhs = ri;
-modelc.sense = repmat('<',length(modelc.rhs ),1);
-modelc.vtype = repmat([repmat('C',[nu + ineq,1]);repmat('B',[ineq, 1])], [T,1] );
-gurobi_write(modelc, 'modelc.lp')
-resultc = gurobi(modelc, params);
-x1 = resultc.x;
+% % %the original model
+% % params.OutputFlag = 0;
+% % clear models
+% % model.modelsense = 'min';
+% % model.obj = ci;
+% % model.Q = sparse(Qi);
+% % model.A = sparse(Ai);
+% % model.rhs = di;
+% % model.sense = repmat('<',length(model.rhs ),1);
+% % gurobi_write(model, 'mymodel.lp')
+% % result = gurobi(model,params);
+% % x0 = result.x;
+% % 
+% % %the lagrange model
+% % params.OutputFlag = 0;
+% % clear models
+% % modelc.modelsense = 'min';
+% % modelc.obj = 1*ones(length(Bi(1,:)),1);
+% % modelc.A = sparse(Bi);
+% % modelc.rhs = ri;
+% % modelc.sense = repmat('<',length(modelc.rhs ),1);
+% % modelc.vtype = repmat([repmat('C',[nu + ineq,1]);repmat('B',[ineq, 1])], [T,1] );
+% % gurobi_write(modelc, 'modelc.lp')
+% % resultc = gurobi(modelc, params);
+% % x1 = resultc.x;
 
 % % % % % % function [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T] = AES()
 % % % % % %     T = 1;

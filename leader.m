@@ -1,19 +1,21 @@
 %the leader model
 function [Q_leader, c_leader] = leader(lambda_e, lambda_s, T, N)
 	%length of z_t, y_t;
-	len_zt = 2;
-	y_t = 12;
+	len_zt = 2 ;
+	y_t = [12,16] ;
     %variables
     z = 1 : len_zt * T;
-    y = cell(N);
+    y = cell(sum(N),1);
     start = len_zt * T;
-    for mm = 1 : N
-        y{mm} = start + 1 : start + y_t * T;
-        start = y{mm}(end);
+    for mm = 1 : length(N)      
+            y{mm} = start + 1 : start + y_t(mm) * T;
+            start = y{mm}(end); 
     end
-    
     %sum of len_zt and y_t
-    nu = len_zt + y_t;
+    nu = len_zt * T;
+    for mm = 1 : length(N)
+            nu = nu  + y_t(mm) * T *N(mm);
+    end
     %Q matrix
     Q_leader = zeros(nu * T, nu * T);
     for mm = 1 : N
