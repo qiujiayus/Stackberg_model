@@ -4,13 +4,15 @@ clear;
 kind = 2;  %the kind of player
 N = [1,2]; %each player's number 
 T = 3;
-%length of z_t, y_t;
+
+%length of z_t, y_continuous_t, y_binary_t;
 len_zt = 2;
-y_continuous_t = 8;
-y_binary_t = 4;
+y_continuous_t = [8, 8];
+y_binary_t = [4, 4];
 
 %R = {U, B}
 %R w <= r
+
 B = cell(sum(N));   %the B 
 U = cell(sum(N));   %the U 
 r = [];
@@ -54,8 +56,12 @@ modelx.Q = sparse(Q_leader);
 modelx.A = sparse(R);
 modelx.rhs = r;
 modelx.sense = repmat('<',length(modelx.rhs ),1);
-modelx.vtype = [repmat('C',[len_zt * T, 1]);repmat([repmat('C',[y_continuous_t, 1]);repmat('B',[y_binary_t, 1])], [T * N,1] )];
-gurobi_write(modelx, 'modelx.lp')
+modelx_vtype_y = [];
+for mm = 1 : kind
+	modelx_vtype_y = [modelx_vtype_y;repmat([repmat('C',[y_continuous_t, 1]);repmat('B',[y_binary_t, 1])], [T * N(mm),1])];
+end
+modelx.vtype = [repmat('C',[len_zt * T, 1]);modelx_vtype_y];
+gurobi_write(modelx, 'modelx.lp');
 resultx = gurobi(modelx, params);
 x1 = resultx.x;
 
