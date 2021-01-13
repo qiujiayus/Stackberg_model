@@ -130,75 +130,7 @@ the original problem is translated into the following problem
         0\\
     \end{bmatrix} 
 \end{align}
-T hour model:
-\begin{align} 
-    \begin{bmatrix}
-        X_1 & X_2 & \cdots  & X_T\\
-    \end{bmatrix} 
-    \begin{bmatrix}
-        Q_1 & 0 & 0 & 0\\
-        0 & Q_2 & 0 & 0\\
-        0 & 0 & \ddots  & 0\\
-        0 & 0 & 0 & Q_T
-    \end{bmatrix} 
-    \begin{bmatrix}
-        X_1\\
-        X_2\\
-        \vdots \\
-        X_T
-    \end{bmatrix} +
-    \begin{bmatrix}
-        c_1 & c_2 & \cdots  & c_T\\
-    \end{bmatrix}
-    \begin{bmatrix}
-        X_1\\
-        X_2\\
-        \vdots \\
-        X_T
-    \end{bmatrix}
-\end{align}
 
-\begin{align} 
-    \begin{bmatrix}
-        A_1 & 0 & 0 & 0\\
-        0 & A_2 & 0 & 0\\
-        0 & 0 & \ddots  & 0\\
-        0 & 0 & 0 & A_T
-    \end{bmatrix} 
-    \begin{bmatrix}
-        X_1\\
-        X_2\\
-        \vdots \\
-        X_T
-    \end{bmatrix} \leq
-    \begin{bmatrix}
-        d_1\\
-        d_2\\
-        \vdots \\
-        d_T
-    \end{bmatrix}
-\end{align}
-
-\begin{align} 
-    \begin{bmatrix}
-        B_1 & 0 & 0 & 0\\
-        0 & B_2 & 0 & 0\\
-        0 & 0 & \ddots  & 0\\
-        0 & 0 & 0 & B_T
-    \end{bmatrix} 
-    \begin{bmatrix}
-        Y_1\\
-        Y_2\\
-        \vdots \\
-        Y_T
-    \end{bmatrix} \leq
-    \begin{bmatrix}
-        r_1\\
-        r_2\\
-        \vdots \\
-        r_T
-    \end{bmatrix}
-\end{align}
 
 
 
@@ -247,205 +179,6 @@ T hour model:
 
 
 
-\begin{align}  
-    &min \quad \sum_{t = 1}^{T} \Bigg[ \sum_{i \in \Omega_C\bigcup \Omega_A } (\lambda _{si} - C_{si}) P_{si} + 
-    \sum_{i \in \Omega_A } (\lambda _{ei} - C_{ei}) P_{ei} \Bigg] \nonumber\\
-    &s.t. \quad Mw \geq r
-\end{align}
-
-
-\begin{align}  
-    \begin{bmatrix}
-        -U_{1} & B_{1} & \cdots & \cdots & \cdots\\
-        -U_{2} &\vdots  & B_{2} & \cdots & \cdots\\
-         \vdots  & \vdots  & \vdots & \ddots  & \cdots\\
-        -U_{N} & \cdots  & \cdots & \cdots & B_{N}\\
-    \end{bmatrix}
-    \begin{bmatrix}
-        z\\
-        y_1\\
-        y_2\\
-        \vdots \\
-        y_N\\
-    \end{bmatrix} \leq
-    \begin{bmatrix}
-        r_{1}^0\\
-        r_{2}^0\\
-        \vdots \\
-        r_{n}^0\\
-    \end{bmatrix}
-\end{align}
-
-
-
-
-
-
-\begin{align} 
-    &\begin{bmatrix}
-        C_{ei} 
-        C_{si} 
-        E_{ei} 
-        E_{si} 
-        P_{ei} 
-        P_{si} 
-        u_1
-        u_2
-        u_3
-        u_4
-        I1
-        I2
-        I3
-        I4 
-    \end{bmatrix}
-    \begin{bmatrix}
-        0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-    \end{bmatrix} 
-    \begin{bmatrix}
-        C_{ei} \\
-        C_{si} \\
-        E_{ei} \\
-        E_{si} \\
-        P_{ei} \\
-        P_{si} \\
-        u_1\\
-        u_2\\
-        u_3\\
-        u_4\\
-        I1\\
-        I2\\
-        I3\\
-        I4 
-    \end{bmatrix}\nonumber\\
-    &+
-    \begin{bmatrix}
-        0 & 0 & 0 & 0 & \lambda_{ei} & \lambda_{si} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-    \end{bmatrix} 
-    \begin{bmatrix}
-        C_{ei} \\
-        C_{si} \\
-        E_{ei} \\
-        E_{si} \\
-        P_{ei} \\
-        P_{si} \\
-        u_1\\
-        u_2\\
-        u_3\\
-        u_4\\
-        I1\\
-        I2\\
-        I3\\
-        I4 
-    \end{bmatrix}
-\end{align}
-\begin{align}  
-    \begin{bmatrix}
-        -C_{1,1} & B_{1,1} &         &         &         &         &         &         &         &         &         &         &\\
-        \vdots  &         & \ddots  &         &         &         &         &         &         &         &         &         &\\
-        -C_{N,1} &         &         & B_{N,1} &         &         &         &         &         &         &         &         &\\
-                &         &         &         & -C_{1,2} & B_{1,2} &         &         &         &         &         &         &\\
-                &         &         &         & \vdots  &         & \ddots  &         &         &         &         &         &\\
-                &         &         &         & -C_{N,2} &         &         & B_{N,2} &         &         &         &         &\\
-                &         &         &         &         &         &         &         & \ddots  &         &         &         &\\
-                &         &         &         &         &         &         &         &         & -C_{1,T} & B_{1,T} &         &\\
-                &         &         &         &         &         &         &         &         & \vdots  &         & \ddots  &\\
-                &         &         &         &         &         &         &         &         & -C_{N,T} &         &         & B_{N,T}\\
-    \end{bmatrix}
-    \begin{bmatrix}
-        z_{1}\\
-        y_{1,1}\\
-        \vdots \\
-        y_{N,1} \\
-        z_{2}\\
-        y_{1,2}\\
-        \vdots \\
-        y_{N,2} \\
-        \vdots \\
-        z_{T}\\
-        y_{1,T}\\
-        \vdots \\
-        y_{N,T} \\
-    \end{bmatrix} \leq
-    \begin{bmatrix}
-        r_{1,1}^0\\
-        \vdots \\
-        r_{N,1}^0\\
-        r_{1,2}^0\\
-        \vdots \\
-        r_{N,2}^0\\
-        \vdots \\
-        r_{1,T}^0\\
-        \vdots \\
-        r_{N,T}^0\\
-    \end{bmatrix}
-\end{align}
-
-
-\begin{align}  
-    \begin{bmatrix}
-        -U_{1,1} & B_{1,1} &         &         &         &         &         &         &         &         &         &         &\\
-        \vdots  &         & \ddots  &         &         &         &         &         &         &         &         &         &\\
-        -U_{N,1} &         &         & B_{N,1} &         &         &         &         &         &         &         &         &\\
-        -U_{1,2} &         &         &         & B_{1,2} &         &         &         &         &         &         &         &\\
-        \vdots  &         &         &         &          &  \ddots &        &         &         &         &         &         &\\
-        -U_{N,2}&         &         &         &         &         & B_{N,2}  &        &         &         &         &         &\\
-        \vdots  &         &         &         &         &         &         & \ddots  &         &         &         &         &\\
-        -U_{1,T}&         &         &         &         &         &         &         & B_{1,T} &         &          &         &\\
-        \vdots  &         &         &         &         &         &         &         &         & \ddots  &         &     &\\
-        -U_{N,T}&         &         &         &         &         &         &         &         &         & B_{N,T}  &         & \\
-    \end{bmatrix}
-    \begin{bmatrix}
-        z_{1}\\
-        \vdots\\
-        z_{T}\\
-        y_{1,1}\\
-        \vdots \\
-        y_{1,T} \\
-        y_{2,1}\\
-        \vdots \\
-        y_{2,T} \\
-        \vdots \\
-        y_{N,1}\\
-        \vdots \\
-        y_{N,T} \\
-    \end{bmatrix} \leq
-    \begin{bmatrix}
-        r_{1,1}^0\\
-        \vdots \\
-        r_{N,1}^0\\
-        r_{1,2}^0\\
-        \vdots \\
-        r_{N,2}^0\\
-        \vdots \\
-        r_{1,T}^0\\
-        \vdots \\
-        r_{N,T}^0\\
-    \end{bmatrix}
-\end{align}
-
-
-
-\begin{align}
-    \begin{cases}
-         B_{1,1} y_{1,1} \leq r_{1,1}^0 - C_{1,1} z_1\\
-         B_{2,1} y_{2,1} \leq r_{2,1}^0 - C_{2,1} z_1\\
-         B_{3,1} y_{3,1} \leq r_{3,1}^0 - C_{3,1} z_1\\
-        \vdots \\
-    \end{cases}
-\end{align}
 
 
 
@@ -478,75 +211,7 @@ T hour model:
 
 
 
-T hour model:
-\begin{align} 
-    \begin{bmatrix}
-        X_1 & X_2 & \cdots  & X_T\\
-    \end{bmatrix} 
-    \begin{bmatrix}
-        Q_1 & 0 & 0 & 0\\
-        0 & Q_2 & 0 & 0\\
-        0 & 0 & \ddots  & 0\\
-        0 & 0 & 0 & Q_T
-    \end{bmatrix} 
-    \begin{bmatrix}
-        X_1\\
-        X_2\\
-        \vdots \\
-        X_T
-    \end{bmatrix} +
-    \begin{bmatrix}
-        c_1 & c_2 & \cdots  & c_T\\
-    \end{bmatrix}
-    \begin{bmatrix}
-        X_1\\
-        X_2\\
-        \vdots \\
-        X_T
-    \end{bmatrix}
-\end{align}
 
-\begin{align} 
-    \begin{bmatrix}
-        A_1 & 0 & 0 & 0\\
-        0 & A_2 & 0 & 0\\
-        0 & 0 & \ddots  & 0\\
-        0 & 0 & 0 & A_T
-    \end{bmatrix} 
-    \begin{bmatrix}
-        X_1\\
-        X_2\\
-        \vdots \\
-        X_T
-    \end{bmatrix} \leq
-    \begin{bmatrix}
-        d_1\\
-        d_2\\
-        \vdots \\
-        d_T
-    \end{bmatrix}
-\end{align}
-
-\begin{align} 
-    \begin{bmatrix}
-        B_1 & 0 & 0 & 0\\
-        0 & B_2 & 0 & 0\\
-        0 & 0 & \ddots  & 0\\
-        0 & 0 & 0 & B_T
-    \end{bmatrix} 
-    \begin{bmatrix}
-        Y_1\\
-        Y_2\\
-        \vdots \\
-        Y_T
-    \end{bmatrix} \leq
-    \begin{bmatrix}
-        r_1\\
-        r_2\\
-        \vdots \\
-        r_T
-    \end{bmatrix}
-\end{align}
 
 
 
@@ -623,7 +288,9 @@ the AES model:
         E_{ei} - E_{ei}^{max} \leq 0\\
          -E_{ei} + E_{ei}^{min}\leq 0\\
          -P_{ei}\leq 0\\
-          P_{ei} - P_{ei}^{max} \leq 0
+          P_{ei} - P_{ei}^{max} \leq 0\\
+          -P_{si}\leq 0\\
+          P_{si} - P_{si}^{max} \leq 0
         \end{cases}
 \end{align}
 the model can be written in the form of matrix
@@ -682,495 +349,64 @@ the model can be written in the form of matrix
         P_{s}^{max}
     \end{bmatrix}
 \end{align}
-
-
-
-
-
-
-
-\begin{align} 
-    L = \frac{1}{2}bE_{si}^2 -aE_{si} + C_{si}P_{si} + u_1(E_{si} - E_{si}^{max}) + u_2(-E_{si} + E_{si}^{min}) +
-     u_3(-P_{si}) + u_4(P_{si} - P_{si}^{max})
+the leader model:
+\begin{align}  
+    &min \quad \sum_{t = 1}^{T} \Bigg[ \sum_{i \in \Omega_C\bigcup \Omega_A } (\lambda _{si} - C_{si}) P_{si} + 
+    \sum_{i \in \Omega_A } (\lambda _{ei} - C_{ei}) P_{ei} \Bigg] \nonumber\\
+    &s.t. \quad Mw \geq r
 \end{align}
 \begin{align}  
-    \frac{\partial L}{\partial E_{si}} = bE_{si} - a + u_1 - u_2= 0 
+    w = \{z, y_{1}, \cdots y_{N}\}
 \end{align}
+
 \begin{align}  
-    \frac{\partial L}{\partial P_{si}} = C_{si} - u_3 + u_4= 0 
-\end{align}
-\begin{align}  
-    \begin{bmatrix}
-         \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & b  & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            1 & -1 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & -1 & 1
-        \end{bmatrix}  &
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & -b  & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            -1 & 1 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 1 & -1
-        \end{bmatrix}  &
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            0 & 1 & 0 & 0\\
-            0 & -1 & 0 & 0\\
-            0 & 0 & 0 & -1\\
-            0 & 0 & 0 & 1
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}   &
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            0 & -1 & 0 & 0\\
-            0 & 1 & 0 & 0\\
-            0 & 0 & 0 & 1\\
-            0 & 0 & 0 & -1
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}   &
-        \begin{bmatrix}
-            M & 0 & 0 & 0\\
-            0 & M & 0 & 0\\
-            0 & 0 & M & 0\\
-            0 & 0 & 0 & M
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            1 & 0 & 0 & 0\\
-            0 & 1 & 0 & 0\\
-            0 & 0 & 1 & 0\\
-            0 & 0 & 0 & 1
-        \end{bmatrix}   &
-        \begin{bmatrix}
-            -M & 0 & 0 & 0\\
-            0 & -M & 0 & 0\\
-            0 & 0 & -M & 0\\
-            0 & 0 & 0 & -M
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            -1 & 0 & 0 & 0\\
-            0 & -1 & 0 & 0\\
-            0 & 0 & -1 & 0\\
-            0 & 0 & 0 & -1
-        \end{bmatrix}   &
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix} \\
+    z_t = \begin{bmatrix}
+        C_{et}\\
+        C_{st}\\
     \end{bmatrix}
-    \begin{bmatrix}
-        E_{ei} \\
-        E_{si} \\
-        P_{ei} \\
-        P_{si} \\
-        u_1\\
-        u_2\\
-        u_3\\
-        u_4\\
+\end{align}
+the model of conventional ship has 4 constrains,so the number of u and I vector is 4:
+\begin{align}  
+    y^{conventional}_t = \begin{bmatrix}
+        E_{e}\\
+        E_{s}\\
+        P_{e}\\
+        P_{s}\\
+        u1\\
+        u2\\
+        u3\\
+        u4\\
         I1\\
         I2\\
         I3\\
-        I4 
-    \end{bmatrix} \leq
-    \begin{bmatrix}
-        \begin{bmatrix}
-            0\\
-            a\\
-            0\\
-            -C_{si}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            -a\\
-            0\\
-            C_{si}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            E_{si}^{max}\\
-            E_{si}^{min}\\
-            0\\
-            P_{s}^{max}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            -E_{si}^{max} + M\\
-            -E_{si}^{min} + M\\
-            M\\
-            -P_{s}^{max} + M
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            0\\
-            0\\
-            0
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            0\\
-            0\\
-            0
-        \end{bmatrix}\\
-    \end{bmatrix} 
-\end{align}
-
-\begin{align}
-    \begin{bmatrix}
-        \begin{bmatrix}
-            0\\
-            a\\
-            0\\
-            -C_{si}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            -a\\
-            0\\
-            C_{si}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            E_{si}^{max}\\
-            E_{si}^{min}\\
-            0\\
-            P_{s}^{max}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            -E_{si}^{max} + M\\
-            -E_{si}^{min} + M\\
-            M\\
-            -P_{s}^{max} + M
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            0\\
-            0\\
-            0
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            0\\
-            0\\
-            0
-        \end{bmatrix}\\
-    \end{bmatrix} +
-    \begin{bmatrix}
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & -c\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & c\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-    \end{bmatrix}
-    \begin{bmatrix}
-        C_{ei}\\
-        C_{si}
+        I4\\
     \end{bmatrix}
 \end{align}
-
-
+the model of AES has 6 constrains,so the number of u and I vector is 6:
 \begin{align}  
-    \begin{bmatrix}
-         \begin{bmatrix}
-            d & 0 & 0 & 0\\
-            0 & 0  & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            -1 & 1 & 0  & 0\\
-            0 & 0 & 0 & 0\\
-            \eta & -\eta & -\eta  & \eta\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  &
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            -d & 0 & 0 & 0\\
-            0 & 0  & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            1 & -1 & 0  & 0\\
-            0 & 0 & 0 & 0\\
-            -\eta & \eta & \eta  & -\eta\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  &
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            1 & 0 & -\eta  & 0\\
-            -1 & 0 & \eta & 0\\
-            0 & 0 & \eta & 0\\
-            0 & 0 & -\eta & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}   &
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            -1 & 0 & \eta  & 0\\
-            1 & 0 & -\eta & 0\\
-            0 & 0 & -\eta & 0\\
-            0 & 0 & \eta & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}   &
-        \begin{bmatrix}
-            M & 0 & 0 & 0\\
-            0 & M & 0 & 0\\
-            0 & 0 & M & 0\\
-            0 & 0 & 0 & M
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            1 & 0 & 0 & 0\\
-            0 & 1 & 0 & 0\\
-            0 & 0 & 1 & 0\\
-            0 & 0 & 0 & 1
-        \end{bmatrix}   &
-        \begin{bmatrix}
-            -M & 0 & 0 & 0\\
-            0 & -M & 0 & 0\\
-            0 & 0 & -M & 0\\
-            0 & 0 & 0 & -M
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix}  & 
-        \begin{bmatrix}
-            -1 & 0 & 0 & 0\\
-            0 & -1 & 0 & 0\\
-            0 & 0 & -1 & 0\\
-            0 & 0 & 0 & -1
-        \end{bmatrix}   &
-        \begin{bmatrix}
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0\\
-            0 & 0 & 0 & 0
-        \end{bmatrix} \\
-    \end{bmatrix}
-    \begin{bmatrix}
-        E_{ei} \\
-        E_{si} \\
-        P_{ei} \\
-        P_{si} \\
-        u_1\\
-        u_2\\
-        u_3\\
-        u_4\\
+    y^{AES}_t = \begin{bmatrix}
+        E_{e}\\
+        E_{s}\\
+        P_{e}\\
+        P_{s}\\
+        u1\\
+        u2\\
+        u3\\
+        u4\\
+        u5\\
+        u6\\
         I1\\
         I2\\
         I3\\
-        I4 
-    \end{bmatrix} \leq
-    \begin{bmatrix}
-        \begin{bmatrix}
-            c \\
-             0 \\
-            -C_{ei} \\
-            -C_{si}
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            -c \\
-             0 \\
-            C_{ei} \\
-            C_{si}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            E_{ei}^{0}\\
-            -E_{ei}^{0}\\
-            E_{ei}^{max} - E_{ei}^{0}\\
-            -E_{ei}^{min} + E_{ei}^{0}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            -E_{ei}^{0} + M\\
-            E_{ei}^{0}^{min} + M\\
-            -E_{ei}^{max} + E_{ei}^{0} + M\\
-            E_{ei}^{min} - E_{ei}^{0} + M
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            0\\
-            0\\
-            0
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            0\\
-            0\\
-            0
-        \end{bmatrix}\\
-    \end{bmatrix} 
+        I4\\
+        I5\\
+        I6\\
+    \end{bmatrix}
 \end{align}
 
-\begin{align}
-    \begin{bmatrix}
-        \begin{bmatrix}
-            c \\
-             0 \\
-            -C_{ei} \\
-            -C_{si}
-        \end{bmatrix} \\
-        \begin{bmatrix}
-            -c \\
-             0 \\
-            C_{ei} \\
-            C_{si}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            E_{ei}^{0}\\
-            -E_{ei}^{0}\\
-            E_{ei}^{max} - E_{ei}^{0}\\
-            -E_{ei}^{min} + E_{ei}^{0}
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            -E_{ei}^{0} + M\\
-            E_{ei}^{0}^{min} + M\\
-            -E_{ei}^{max} + E_{ei}^{0} + M\\
-            E_{ei}^{min} - E_{ei}^{0} + M
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            0\\
-            0\\
-            0
-        \end{bmatrix}\\
-        \begin{bmatrix}
-            0\\
-            0\\
-            0\\
-            0
-        \end{bmatrix}\\
-    \end{bmatrix}  +
-    \begin{bmatrix}
-        0 & 0\\
-        0 & 0\\
-        c1 & 0\\
-        0 & c2\\
-        0 & 0\\
-        0 & 0\\
-        c1 & 0\\
-        0 & c2\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-    \end{bmatrix}
-    \begin{bmatrix}
-        C_{ei}\\
-        C_{si}
-    \end{bmatrix}
-\end{align}
+
+
+
 
 
 

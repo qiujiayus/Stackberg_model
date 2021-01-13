@@ -86,6 +86,13 @@ modelx.vtype = [repmat('C',[len_zt * T, 1]);modelx_vtype_y];
 gurobi_write(modelx, 'modelx.lp');
 resultx = gurobi(modelx, params);
 x = resultx.x
+% Obtain the optimal action of each player
+% 1) Leader
+x_Leader = struct("Ce", x(1),"Cs", x(2));
+% 2) Follower
+x_conventional = struct("Ee", x(3), "Es",x(4), "Pe", x(5),"Ps", x(6),"u1", x(7),"u2", x(8),"u3", x(9),"u4",x(10), "I1",x(11), "I2", x(12),"I3",x(13), "I4",x(14));
+x_AES = struct("Ee", x(15), "Es",x(16), "Pe", x(17),"Ps", x(18),"u1", x(19),"u2", x(20),"u3", x(21),"u4",x(22), "u5",x(23), "u6", x(24),"I1",x(25), "I2",x(26),"I3",x(27),"I4",x(28),"I5",x(29),"I6",x(30));
+
 
 
 % % %the original model
