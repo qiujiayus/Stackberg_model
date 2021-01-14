@@ -51,7 +51,6 @@ function [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = conventional(a, b, 
     Ei = diag(ones(ineq * T, 1));
     %Mi matrix
     Mi = M * Ei;
-    %TODO
     
     %B matrix
     Bi = zeros((2 * nu + 2 * ineq + 2 * ineq) * T, nv);
@@ -86,10 +85,10 @@ function [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = conventional(a, b, 
             zeros(ineq,1)];
     end
     %U matrix
-    c = 1;
-    Ui = zeros(length(ri(:,1)), 2 * N);
-    for mm = 1 : T
+    c = -1;
+    Ui = zeros(length(ri(:,1)), 2 *  T);
+    for mm = 1 : T 
         Ui(4 + (mm - 1) * (2 * nu + 2 * ineq + 2 * ineq), mm * 2) = c;  
-        Ui(8 + (mm - 1) * (2 * nu + 2 * ineq + 2 * ineq), mm * 2) = c;
+        Ui(8 + (mm - 1) * (2 * nu + 2 * ineq + 2 * ineq), mm * 2) = c; 
     end
 end

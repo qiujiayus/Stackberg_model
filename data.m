@@ -1,15 +1,15 @@
-function [] = data()
-    a =[10,20,50]; 
-    b =[0.01,0.01,0.01];
-    c =[10,20,50];
-    d =[0.01,0.01,0.01];
-    Cs = [75, 72, 70];
-    Ce = [75, 72, 70];
-    Esi_max = [100, 60, 50];
-    Esi_min = [15, 10, 5];
-    Psi_max = [80, 100, 70];
-    Eei_max = [100, 60, 50];
-    Eei_min = [15, 10, 5];
-    Pei_max = [80, 100, 70];
+function [] = data(N) 
+    a = repmat(10, [1, sum(N)]); 
+    b = repmat(0.01, [1, sum(N)]); 
+    c = repmat(20, [1, sum(N)]); 
+    d = repmat(0.01, [1, sum(N)]); 
+    Cs = repmat(75, [1, sum(N)]); 
+    Ce = repmat(75, [1, sum(N)]); 
+    Esi_max = repmat(100, [1, sum(N)]); 
+    Esi_min = repmat(15, [1, sum(N)]); 
+    Psi_max = repmat(80, [1, sum(N)]); 
+    Eei_max = repmat(100, [1, sum(N)]); 
+    Eei_min = repmat(15, [1, sum(N)]); 
+    Pei_max = repmat(80, [1, sum(N)]); 
     save data;
 end

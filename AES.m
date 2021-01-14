@@ -41,7 +41,7 @@ function [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = AES(c, d, Ce, Cs, E
             Ai(nn + (mm - 1) * ineq, ineq_x{nn} + (mm - 1) * nu) = ineq_sym{nn};
         end
     end
-    %b matrix
+    %d matrix
     di = zeros(ineq * T, 1);
     for mm = 1 : T
         for nn = 1 : ineq
@@ -87,10 +87,10 @@ function [Qi, ci, Ai, di, Ei, Mi, Bi, ri, nu, ineq, T, Ui] = AES(c, d, Ce, Cs, E
             zeros(ineq,1)];
     end
     %U matrix
-    c1 = 1;
-	c2 = 1;
-    Ui = zeros(length(ri(:,1)), 2 * N);
-    for mm = 1 : T
+    c1 = -1;
+	c2 = -1;
+    Ui = zeros(length(ri(:,1)), 2 *  T );
+    for mm = 1 : T 
 		Ui(3 + (mm - 1) * (2 * nu + 2 * ineq + 2 * ineq),1 + (mm - 1) * 2) = c1;
         Ui(4 + (mm - 1) * (2 * nu + 2 * ineq + 2 * ineq),mm * 2) = c2;  
 		Ui(7 + (mm - 1) * (2 * nu + 2 * ineq + 2 * ineq),1 + (mm - 1) * 2) = c1;

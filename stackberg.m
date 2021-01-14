@@ -1,14 +1,33 @@
 clear;
-load data;
 %%parameter preset
+type = ["conventional", "AES"];
 N = [1, 1]; %each player's number 
 T = 1;%hour
 
-%length of z_t, y_continuous_t, y_binary_t;
-len_zt = 2;
+%load data
+data(N);
+load data;
 
-y_continuous_t = [8, 10];
-y_binary_t = [4, 6];%conventional 模型的不等式约束条件有4个，AES 模型的不等式约束条件有6个
+%length of z_t(Ce,Cs), y_continuous_t, y_binary_t;
+zt_type = ["Ce", "Cs"];
+len_zt = 2;
+%the y_continuous of conventional ship is [Ee, Es, Pe, Ps, u1, u2, u3, u4]
+%the y_continuous of AES is [Ee, Es, Pe, Ps, u1, u2, u3, u4, u5, u6]
+y_continuous = [8, 10];
+%the y_binary of conventional ship is [I1, I2, I3, I4]
+%the y_binary of AES is [I1, I2, I3, I4, I5, I6]
+y_binary = [4, 6];%conventional 模型的不等式约束条件有4个，对应的binary变量有4个，AES 模型的不等式约束条件有6个，对应的binary变量有6个。
+
+
+y_continuous_t = [];
+y_binary_t = [];
+for mm = 1 : length(N)
+     y_continuous_t = [y_continuous_t, repmat(y_continuous(mm), [1, N(mm)])];
+end
+for mm = 1 : length(N)
+     y_binary_t = [y_binary_t, repmat(y_binary(mm), [1, N(mm)])];
+end
+
 
 %R = {U, B}
 %R w <= r
@@ -33,26 +52,32 @@ for nn =  N(1) + 1 : N(1) + N(2)
 	 r = [r;ri];
 end
 
-
+%R matrix
 row = 0;
-for mm = 1 : length(N)
+for mm = 1 : sum(N)
     row = row + length(B{mm}(:,1));
 end
-col = length(U{mm}(1,:));
-for mm = 1 : length(N)
+col = length(U{mm}(1,:))  * sum(N);
+for mm = 1 : sum(N)
     col = col + length(B{mm}(1,:));
 end
 R = zeros(row, col);
+
+
 row = 0;
-col = 0;
+col1 = 0;
+col2 = 0;
 for mm = 1 : sum(N)
     B_temp = B{mm};
     row = row + length(B_temp(:,1));
-    col = col + length(B_temp(1,:));
-    R(1 + (row -  length(B_temp(:,1))): row, 1:length(U{1}(1,:))) = U{mm};
+    col1 = col1 + length(U{mm}(1,:));
+    col2 = col2 + length(B_temp(1,:));
+    R(1 + (row -  length(B_temp(:,1))): row, 1 + (col1 - length(U{mm}(1,:))): col1) = U{mm};
     R(1 + (row -  length(B_temp(:,1))): row, ...
-		len_zt * T + 1 + (col - length(B_temp(1,:))) : len_zt * T+ col) = B{mm};
+		len_zt * T * N + 1 + (col2 - length(B_temp(1,:))) : len_zt * T * N + col2) = B{mm};
 end
+
+
 
 
 %the leader model
@@ -67,6 +92,7 @@ lambda_s = (1:T);
 %the leader model
 params.OutputFlag = 0;
 params.NonConvex = 2;
+params.DualReductions = 0;
 clear models
 modelx.modelsense = 'min';
 modelx.obj = c_leader;
@@ -75,23 +101,111 @@ modelx.A = sparse(R);
 modelx.rhs = r;
 modelx.sense = repmat('<',length(modelx.rhs ),1);
 modelx_vtype_y = [];
-for mm = 1 : length(N)
+for mm = 1 : sum(N)
     for nn = 1 : T
         modelx_vtype_y = [modelx_vtype_y;
             repmat('C',[y_continuous_t(mm), 1]);
             repmat('B',[y_binary_t(mm), 1])];
     end
 end
-modelx.vtype = [repmat('C',[len_zt * T, 1]);modelx_vtype_y];
+modelx.vtype = [repmat('C',[len_zt * T * sum(N), 1]);modelx_vtype_y];
 gurobi_write(modelx, 'modelx.lp');
 resultx = gurobi(modelx, params);
-x = resultx.x
+x = resultx.x;
+
+
+
 % Obtain the optimal action of each player
 % 1) Leader
-x_Leader = struct("Ce", x(1),"Cs", x(2));
+
+pos = 1;
+%mm is the type of players
+%nn is the number of each type of player 
+%aa is time T
+for mm = 1 : length(N)
+    for nn = 1 : N(mm)
+        for aa = 1 : T
+            x_Leader.("Ce" + '_' + '_' + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_Leader.("Cs" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+        end
+    end
+end
+
 % 2) Follower
-x_conventional = struct("Ee", x(3), "Es",x(4), "Pe", x(5),"Ps", x(6),"u1", x(7),"u2", x(8),"u3", x(9),"u4",x(10), "I1",x(11), "I2", x(12),"I3",x(13), "I4",x(14));
-x_AES = struct("Ee", x(15), "Es",x(16), "Pe", x(17),"Ps", x(18),"u1", x(19),"u2", x(20),"u3", x(21),"u4",x(22), "u5",x(23), "u6", x(24),"I1",x(25), "I2",x(26),"I3",x(27),"I4",x(28),"I5",x(29),"I6",x(30));
+for mm = 1 
+    for nn = 1 : N(mm)
+        for aa = 1 : T
+            x_conventional.("Ee" + '_' + '_' + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("Es" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("Pe" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("Ps" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("u1" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("u2" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("u3" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("u4" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("I1" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("I2" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("I3" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_conventional.("I4" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+        end
+    end
+end
+
+
+for mm = 2 
+    for nn = 1 : N(mm)
+        for aa = 1 : T
+            x_AES.("Ee" + '_' + '_' + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("Es" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("Pe" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("Ps" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("u1" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("u2" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("u3" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("u4" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("u5" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("u6" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("I1" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("I2" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("I3" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("I4" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("I5" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+            x_AES.("I6" + '_' + '_'  + type(mm) + '_' + num2str(nn) + '_' + num2str(aa)) = x(pos);
+            pos = pos + 1;
+        end
+    end
+end
+
+
 
 
 
